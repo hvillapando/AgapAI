@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+env/
+venv/
+.venv/
+*.egg-info/
+.tox/
+.coverage
+.pytest_cache/
+htmlcov/
+.ipynb_checkpoints/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Data files
+*.csv
+
+# OS generated files
+.DS_Store
+.Trashes
+Thumbs.db
