@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Employee Retention Risk Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fintech': {
+                            '50': '#f0f9ff',
+                            '500': '#0ea5e9',
+                            '600': '#0284c7',
+                            '700': '#0369a1',
+                            '900': '#0c4a6e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-users text-fintech-600 text-2xl"></i>
+                        <h1 class="text-2xl font-bold text-gray-900 cursor-pointer" onclick="window.location.href='/'">AgapAI</h1>
+                    </div>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-600">Reports & Exports</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500" id="lastUpdated">Last Updated: 2 hours ago</span>
+                    <button class="bg-fintech-600 text-white px-4 py-2 rounded-lg hover:bg-fintech-700 transition-colors" onclick="refreshData()">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex space-x-8">
+                <a href="/" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-chart-pie mr-2"></i>Dashboard
+                </a>
+                <a href="/analytics" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-chart-line mr-2"></i>Analytics
+                </a>
+                <a href="/reports" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-fintech-600 text-fintech-600">
+                    <i class="fas fa-file-alt mr-2"></i>Reports
+                </a>
+                <a href="/actions" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-tasks mr-2"></i>Action Items
+                </a>
+                <a href="/settings" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Reports & Exports</h1>
+                    <p class="text-gray-600 mt-2">Generate and download comprehensive reports for stakeholders</p>
+                </div>
+                <button onclick="openReportGenerator()" class="bg-fintech-600 text-white px-6 py-3 rounded-lg hover:bg-fintech-700 transition-colors flex items-center">
+                    <i class="fas fa-plus mr-2"></i>Generate New Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Report Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Reports</p>
+                        <p class="text-3xl font-bold text-gray-900">156</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-blue-600 mt-2">+12 this month</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Storage Used</p>
+                        <p class="text-3xl font-bold text-indigo-600">2.4GB</p>
+                    </div>
+                    <div class="bg-indigo-100 p-3 rounded-full">
+                        <i class="fas fa-database text-indigo-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-indigo-600 mt-2">Of 10GB total</p>
+            </div>
+        </div>
+
+        <!-- Report Templates -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+
+            <!-- Quarterly Report -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Quarterly Analytics</h3>
+                        <p class="text-sm text-gray-600 mt-1">Comprehensive quarterly analysis</p>
+                    </div>
+                    <i class="fas fa-calendar-alt text-fintech-600 text-xl"></i>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Trend analysis</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Department breakdown</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Predictive insights</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500">Last generated: 3 days ago</span>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadReport('monthly')" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="scheduleReport('monthly')" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-clock"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Summary -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Executive Summary</h3>
+                        <p class="text-sm text-gray-600 mt-1">High-level insights for leadership</p>
+                    </div>
+                    <i class="fas fa-chart-pie text-fintech-600 text-xl"></i>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Key metrics overview</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Strategic recommendations</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>ROI analysis</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500">Last generated: 1 week ago</span>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadReport('executive')" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="scheduleReport('executive')" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-clock"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Department Report -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Department Report</h3>
+                        <p class="text-sm text-gray-600 mt-1">Department-specific analysis</p>
+                    </div>
+                    <i class="fas fa-building text-fintech-600 text-xl"></i>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Department risk levels</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Team comparisons</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Action recommendations</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500">Last generated: 2 weeks ago</span>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadReport('department')" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="scheduleReport('department')" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-clock"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Report -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Custom Report</h3>
+                        <p class="text-sm text-gray-600 mt-1">Build your own report</p>
+                    </div>
+                    <i class="fas fa-cogs text-fintech-600 text-xl"></i>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Custom metrics</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Flexible date ranges</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Multiple formats</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500">Create new report</span>
+                    <div class="flex space-x-2">
+                        <button onclick="createCustomReport()" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Reports</h3>
+            </div>
+            <div class="divide-y divide-gray-100">
+                <div class="p-6 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-blue-100 p-2 rounded-lg">
+                            <i class="fas fa-file-pdf text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">Weekly Risk Summary - Dec 2, 2024</h4>
+                            <p class="text-sm text-gray-600">PDF • 2.3 MB • Generated 2 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadReport('recent1')" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="shareReport('recent1')" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-green-100 p-2 rounded-lg">
+                            <i class="fas fa-file-excel text-green-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">Monthly Analytics - November 2024</h4>
+                            <p class="text-sm text-gray-600">Excel • 1.8 MB • Generated 3 days ago</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadReport('recent2')" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="shareReport('recent2')" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-purple-100 p-2 rounded-lg">
+                            <i class="fas fa-file-pdf text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">Executive Summary - Q4 2024</h4>
+                            <p class="text-sm text-gray-600">PDF • 3.1 MB • Generated 1 week ago</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadReport('recent3')" class="text-fintech-600 hover:text-fintech-700">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="shareReport('recent3')" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLastUpdated();
+        });
+
+        function updateLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdated').textContent = `Last Updated: ${timeString}`;
+        }
+
+        function refreshData() {
+            updateLastUpdated();
+            alert('Reports data refreshed!');
+        }
+
+        function openReportGenerator() {
+            alert('Opening report generator...');
+        }
+
+        function downloadReport(reportType) {
+            alert(`Downloading ${reportType} report...`);
+        }
+
+        function scheduleReport(reportType) {
+            alert(`Scheduling ${reportType} report...`);
+        }
+
+        function createCustomReport() {
+            alert('Opening custom report builder...');
+        }
+
+        function shareReport(reportId) {
+            alert(`Sharing report ${reportId}...`);
+        }
+    </script>
+</body>
+</html>
