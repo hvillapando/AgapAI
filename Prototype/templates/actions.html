@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Items - Employee Retention Risk Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fintech': {
+                            '50': '#f0f9ff',
+                            '500': '#0ea5e9',
+                            '600': '#0284c7',
+                            '700': '#0369a1',
+                            '900': '#0c4a6e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-users text-fintech-600 text-2xl"></i>
+                        <h1 class="text-2xl font-bold text-gray-900 cursor-pointer" onclick="window.location.href='/'">AgapAI</h1>
+                    </div>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-600">Action Items & Interventions</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500" id="lastUpdated">Last Updated: 2 hours ago</span>
+                    <button class="bg-fintech-600 text-white px-4 py-2 rounded-lg hover:bg-fintech-700 transition-colors" onclick="refreshData()">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex space-x-8">
+                <a href="/" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-chart-pie mr-2"></i>Dashboard
+                </a>
+                <a href="/analytics" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-chart-line mr-2"></i>Analytics
+                </a>
+                <a href="/reports" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-file-alt mr-2"></i>Reports
+                </a>
+                <a href="/actions" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-fintech-600 text-fintech-600">
+                    <i class="fas fa-tasks mr-2"></i>Action Items
+                </a>
+                <a href="/settings" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Action Items & Interventions</h1>
+                    <p class="text-gray-600 mt-2">Track and manage retention interventions for at-risk employees</p>
+                </div>
+                <button onclick="createNewAction()" class="bg-fintech-600 text-white px-6 py-3 rounded-lg hover:bg-fintech-700 transition-colors flex items-center">
+                    <i class="fas fa-plus mr-2"></i>Create New Action
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Pending Actions</p>
+                        <p class="text-3xl font-bold text-red-600" id="pendingCount">23</p>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <i class="fas fa-clock text-red-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-red-600 mt-2">+5 since yesterday</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">In Progress</p>
+                        <p class="text-3xl font-bold text-yellow-600" id="inProgressCount">15</p>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-full">
+                        <i class="fas fa-spinner text-yellow-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-yellow-600 mt-2">8 due this week</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Completed</p>
+                        <p class="text-3xl font-bold text-green-600" id="completedCount">42</p>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-green-600 mt-2">+12 this month</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Success Rate</p>
+                        <p class="text-3xl font-bold text-blue-600" id="successRate">87%</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-blue-600 mt-2">+5% from last quarter</p>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
+            <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+                <div class="flex-1 max-w-md">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="actionSearchInput" oninput="filterActions()"
+                               placeholder="Search actions..." 
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <select id="statusFilter" onchange="filterActions()" class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-fintech-500">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <select id="priorityFilter" onchange="filterActions()" class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-fintech-500">
+                        <option value="">All Priorities</option>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                    </select>
+                    <select id="assigneeFilter" onchange="filterActions()" class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-fintech-500">
+                        <option value="">All Assignees</option>
+                        <option value="sarah">Sarah Johnson</option>
+                        <option value="mike">Mike Chen</option>
+                        <option value="lisa">Lisa Rodriguez</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action List -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Active Action Items</h3>
+                    <div class="text-sm text-gray-500">
+                        <span id="actionCount">Showing 23 actions</span>
+                    </div>
+                </div>
+            </div>
+            <div class="divide-y divide-gray-100" id="actionList">
+                <!-- Action Item 1 -->
+                <div class="p-6 action-item" data-status="pending" data-priority="high" data-assignee="sarah">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <h4 class="font-semibold text-gray-900">Schedule 1:1 with Employee #001</h4>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    High Priority
+                                </span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Pending
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Address high workload and limited growth opportunities. Software Engineer has shown signs of burnout and needs career progression support.</p>
+                            <div class="flex items-center space-x-4 text-xs text-gray-500 mb-3">
+                                <span><i class="fas fa-calendar mr-1"></i>Due: Tomorrow</span>
+                                <span><i class="fas fa-user mr-1"></i>Assigned: Sarah Johnson</span>
+                                <span><i class="fas fa-building mr-1"></i>Department: IT</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs text-gray-500">Progress:</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-fintech-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500">0%</span>
+                                </div>
+                                <span class="text-xs text-red-500"><i class="fas fa-exclamation-triangle mr-1"></i>Overdue</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 ml-4">
+                            <button onclick="startAction(1)" class="text-blue-600 hover:text-blue-700" title="Start Action">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button onclick="editAction(1)" class="text-gray-600 hover:text-gray-700" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="completeAction(1)" class="text-green-600 hover:text-green-700" title="Complete">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Item 2 -->
+                <div class="p-6 action-item" data-status="in-progress" data-priority="medium" data-assignee="mike">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <h4 class="font-semibold text-gray-900">Compensation Review for Employee #002</h4>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Medium Priority
+                                </span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    In Progress
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Review compensation package for Branch Manager and propose adjustments based on market rates and performance. Employee has expressed concerns about compensation.</p>
+                            <div class="flex items-center space-x-4 text-xs text-gray-500 mb-3">
+                                <span><i class="fas fa-calendar mr-1"></i>Due: Dec 15, 2024</span>
+                                <span><i class="fas fa-user mr-1"></i>Assigned: Mike Chen</span>
+                                <span><i class="fas fa-building mr-1"></i>Department: Retail Banking</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs text-gray-500">Progress:</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-fintech-600 h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500">60%</span>
+                                </div>
+                                <span class="text-xs text-blue-500"><i class="fas fa-clock mr-1"></i>On Track</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 ml-4">
+                            <button onclick="updateProgress(2)" class="text-blue-600 hover:text-blue-700" title="Update Progress">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="completeAction(2)" class="text-green-600 hover:text-green-700" title="Complete">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Item 3 -->
+                <div class="p-6 action-item" data-status="completed" data-priority="high" data-assignee="lisa">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <h4 class="font-semibold text-gray-900">Assign Mentor for Employee #003</h4>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    High Priority
+                                </span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Completed
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Successfully assigned senior UX designer as mentor for new employee. Initial meeting scheduled and UX Designer shows positive response to the intervention.</p>
+                            <div class="flex items-center space-x-4 text-xs text-gray-500 mb-3">
+                                <span><i class="fas fa-calendar mr-1"></i>Completed: Dec 1, 2024</span>
+                                <span><i class="fas fa-user mr-1"></i>Assigned: Lisa Rodriguez</span>
+                                <span><i class="fas fa-building mr-1"></i>Department: Operations</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs text-gray-500">Progress:</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500">100%</span>
+                                </div>
+                                <span class="text-xs text-green-500"><i class="fas fa-check mr-1"></i>Successful</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 ml-4">
+                            <button onclick="viewDetails(3)" class="text-blue-600 hover:text-blue-700" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="reopenAction(3)" class="text-orange-600 hover:text-orange-700" title="Reopen">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="bulkAssign()" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-users text-fintech-600 text-xl mr-3"></i>
+                    <div class="text-left">
+                        <div class="font-medium text-gray-900">Bulk Assign</div>
+                        <div class="text-sm text-gray-600">Assign multiple actions</div>
+                    </div>
+                </button>
+                <button onclick="exportActions()" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-download text-fintech-600 text-xl mr-3"></i>
+                    <div class="text-left">
+                        <div class="font-medium text-gray-900">Export Actions</div>
+                        <div class="text-sm text-gray-600">Download action list</div>
+                    </div>
+                </button>
+                <button onclick="generateReport()" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-chart-bar text-fintech-600 text-xl mr-3"></i>
+                    <div class="text-left">
+                        <div class="font-medium text-gray-900">Action Report</div>
+                        <div class="text-sm text-gray-600">Generate summary report</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let allActions = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLastUpdated();
+            loadActions();
+        });
+
+        function updateLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdated').textContent = `Last Updated: ${timeString}`;
+        }
+
+        function refreshData() {
+            updateLastUpdated();
+            loadActions();
+            alert('Action items data refreshed!');
+        }
+
+        function loadActions() {
+            // In a real app, this would fetch from API
+            // For now, we'll use the static data in the HTML
+            updateActionCounts();
+        }
+
+        function updateActionCounts() {
+            const pending = document.querySelectorAll('[data-status="pending"]').length;
+            const inProgress = document.querySelectorAll('[data-status="in-progress"]').length;
+            const completed = document.querySelectorAll('[data-status="completed"]').length;
+            
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('inProgressCount').textContent = inProgress;
+            document.getElementById('completedCount').textContent = completed;
+            
+            const total = pending + inProgress + completed;
+            const successRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('successRate').textContent = successRate + '%';
+        }
+
+        function filterActions() {
+            const searchQuery = document.getElementById('actionSearchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const assigneeFilter = document.getElementById('assigneeFilter').value;
+
+            const actionItems = document.querySelectorAll('.action-item');
+            let visibleCount = 0;
+
+            actionItems.forEach(item => {
+                const title = item.querySelector('h4').textContent.toLowerCase();
+                const description = item.querySelector('p').textContent.toLowerCase();
+                const status = item.getAttribute('data-status');
+                const priority = item.getAttribute('data-priority');
+                const assignee = item.getAttribute('data-assignee');
+
+                const matchesSearch = title.includes(searchQuery) || description.includes(searchQuery);
+                const matchesStatus = statusFilter === '' || status === statusFilter;
+                const matchesPriority = priorityFilter === '' || priority === priorityFilter;
+                const matchesAssignee = assigneeFilter === '' || assignee === assigneeFilter;
+
+                if (matchesSearch && matchesStatus && matchesPriority && matchesAssignee) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            document.getElementById('actionCount').textContent = `Showing ${visibleCount} actions`;
+        }
+
+        function createNewAction() {
+            alert('Opening new action creation form...');
+        }
+
+        function startAction(actionId) {
+            alert(`Starting action ${actionId}...`);
+        }
+
+        function editAction(actionId) {
+            alert(`Editing action ${actionId}...`);
+        }
+
+        function completeAction(actionId) {
+            alert(`Completing action ${actionId}...`);
+        }
+
+        function updateProgress(actionId) {
+            alert(`Updating progress for action ${actionId}...`);
+        }
+
+        function viewDetails(actionId) {
+            alert(`Viewing details for action ${actionId}...`);
+        }
+
+        function reopenAction(actionId) {
+            alert(`Reopening action ${actionId}...`);
+        }
+
+        function bulkAssign() {
+            alert('Opening bulk assign dialog...');
+        }
+
+        function exportActions() {
+            alert('Exporting action items...');
+        }
+
+        function generateReport() {
+            alert('Generating action report...');
+        }
+    </script>
+</body>
+</html>

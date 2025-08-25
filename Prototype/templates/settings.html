@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Employee Retention Risk Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fintech': {
+                            '50': '#f0f9ff',
+                            '500': '#0ea5e9',
+                            '600': '#0284c7',
+                            '700': '#0369a1',
+                            '900': '#0c4a6e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-users text-fintech-600 text-2xl"></i>
+                        <h1 class="text-2xl font-bold text-gray-900 cursor-pointer" onclick="window.location.href='/'">AgapAI</h1>
+                    </div>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-600">Settings & Configuration</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500" id="lastUpdated">Last Updated: 2 hours ago</span>
+                    <button class="bg-fintech-600 text-white px-4 py-2 rounded-lg hover:bg-fintech-700 transition-colors" onclick="saveSettings()">
+                        <i class="fas fa-save mr-2"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex space-x-8">
+                <a href="/" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-chart-pie mr-2"></i>Dashboard
+                </a>
+                <a href="/analytics" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-chart-line mr-2"></i>Analytics
+                </a>
+                <a href="/reports" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-file-alt mr-2"></i>Reports
+                </a>
+                <a href="/actions" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    <i class="fas fa-tasks mr-2"></i>Action Items
+                </a>
+                <a href="/settings" class="nav-button py-4 px-2 border-b-2 font-medium text-sm transition-colors border-fintech-600 text-fintech-600">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Settings & Configuration</h1>
+            <p class="text-gray-600 mt-2">Configure AI model parameters, notification preferences, and system settings</p>
+        </div>
+
+        <div class="space-y-8">
+            <!-- AI Model Settings -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-brain mr-2 text-fintech-600"></i>
+                    AI Model Configuration
+                </h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Risk Threshold</label>
+                        <div class="space-y-2">
+                            <input type="range" min="0" max="100" value="61" id="riskThreshold" class="w-full" onchange="updateThresholdDisplay(this.value)">
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>Low Risk</span>
+                                <span id="thresholdValue">61%</span>
+                                <span>High Risk</span>
+                            </div>
+                            <p class="text-xs text-gray-600">Employees with risk scores above this threshold will be flagged for attention</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Model Sensitivity</label>
+                        <select id="modelSensitivity" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                            <option value="conservative">Conservative (Fewer false positives)</option>
+                            <option value="standard" selected>Standard (Balanced)</option>
+                            <option value="sensitive">High Sensitivity (More alerts)</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">Higher sensitivity may generate more alerts but could include false positives</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Prediction Horizon</label>
+                        <select id="predictionHorizon" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                            <option value="30">30 days</option>
+                            <option value="60">60 days</option>
+                            <option value="90" selected>90 days</option>
+                            <option value="180">180 days</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">How far ahead the model predicts resignation risk</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Data Refresh Frequency</label>
+                        <select id="dataRefresh" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                            <option value="hourly">Hourly</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly" selected>Weekly</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">How often the system refreshes employee data and recalculates risk scores</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-bell mr-2 text-fintech-600"></i>
+                    Notifications
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-medium text-gray-900">High Risk Alerts</div>
+                            <div class="text-sm text-gray-500">Get notified when employees reach high risk status</div>
+                        </div>
+                        <button onclick="toggleSetting('highRiskAlerts')" id="highRiskAlerts" class="relative inline-flex h-6 w-11 items-center rounded-full bg-fintech-600 transition-colors">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6"></span>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-medium text-gray-900">Weekly Reports</div>
+                            <div class="text-sm text-gray-500">Receive weekly summary reports via email</div>
+                        </div>
+                        <button onclick="toggleSetting('weeklyReports')" id="weeklyReports" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-medium text-gray-900">Action Item Reminders</div>
+                            <div class="text-sm text-gray-500">Get reminded about pending action items</div>
+                        </div>
+                        <button onclick="toggleSetting('actionReminders')" id="actionReminders" class="relative inline-flex h-6 w-11 items-center rounded-full bg-fintech-600 transition-colors">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6"></span>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-medium text-gray-900">Model Performance Alerts</div>
+                            <div class="text-sm text-gray-500">Get notified about significant changes in model performance</div>
+                        </div>
+                        <button onclick="toggleSetting('modelAlerts')" id="modelAlerts" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Settings -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-envelope mr-2 text-fintech-600"></i>
+                    Email Configuration
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Primary Email</label>
+                        <input type="email" id="primaryEmail" value="admin@company.com" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Frequency</label>
+                        <select id="emailFrequency" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                            <option value="immediate">Immediate</option>
+                            <option value="daily" selected>Daily Digest</option>
+                            <option value="weekly">Weekly Summary</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Additional Recipients</label>
+                        <input type="text" id="additionalEmails" placeholder="email1@company.com, email2@company.com" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-fintech-500 focus:border-fintech-500">
+                        <p class="text-xs text-gray-600 mt-1">Separate multiple email addresses with commas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Sources -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-database mr-2 text-fintech-600"></i>
+                    Data Sources
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 p-2 rounded-lg">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-900">HRIS System</div>
+                                <div class="text-sm text-gray-500">Connected to Workday HRIS</div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-green-600">Connected</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 p-2 rounded-lg">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-900">Performance Management</div>
+                                <div class="text-sm text-gray-500">Connected to Performance Review System</div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-green-600">Connected</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-yellow-100 p-2 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-900">Employee Surveys</div>
+                                <div class="text-sm text-gray-500">Survey data integration</div>
+                            </div>
+                        </div>
+                        <button class="text-sm text-fintech-600 hover:text-fintech-700">Configure</button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <i class="fas fa-plus text-gray-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-900">Add New Data Source</div>
+                                <div class="text-sm text-gray-500">Connect additional data sources</div>
+                            </div>
+                        </div>
+                        <button class="text-sm text-fintech-600 hover:text-fintech-700">Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-users-cog mr-2 text-fintech-600"></i>
+                    User Management
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <img class="h-10 w-10 rounded-full" src="https://api.dicebear.com/7.x/initials/svg?seed=Admin" alt="">
+                            <div>
+                                <div class="font-medium text-gray-900">Admin User</div>
+                                <div class="text-sm text-gray-500">admin@company.com</div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-green-600">Owner</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <img class="h-10 w-10 rounded-full" src="https://api.dicebear.com/7.x/initials/svg?seed=HR" alt="">
+                            <div>
+                                <div class="font-medium text-gray-900">HR Manager</div>
+                                <div class="text-sm text-gray-500">hr@company.com</div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-sm text-gray-600 hover:text-gray-700">Edit</button>
+                            <button class="text-sm text-red-600 hover:text-red-700">Remove</button>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-fintech-500 hover:text-fintech-600 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>
+                        Invite New User
+                    </button>
+                </div>
+            </div>
+
+            <!-- System Information -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-fintech-600"></i>
+                    System Information
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Version</label>
+                        <p class="text-sm text-gray-900">v2.1.0</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Last Updated</label>
+                        <p class="text-sm text-gray-900">December 2, 2024</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Model Version</label>
+                        <p class="text-sm text-gray-900">Retention-Risk-v1.5.2</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Data Points</label>
+                        <p class="text-sm text-gray-900">1,247 employees</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLastUpdated();
+        });
+
+        function updateLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdated').textContent = `Last Updated: ${timeString}`;
+        }
+
+        function updateThresholdDisplay(value) {
+            document.getElementById('thresholdValue').textContent = `${value}%`;
+        }
+
+        function toggleSetting(settingId) {
+            const button = document.getElementById(settingId);
+            const span = button.querySelector('span');
+            if (button.classList.contains('bg-fintech-600')) {
+                button.classList.remove('bg-fintech-600');
+                button.classList.add('bg-gray-200');
+                span.classList.remove('translate-x-6');
+                span.classList.add('translate-x-1');
+            } else {
+                button.classList.remove('bg-gray-200');
+                button.classList.add('bg-fintech-600');
+                span.classList.remove('translate-x-1');
+                span.classList.add('translate-x-6');
+            }
+        }
+
+        function saveSettings() {
+            // Collect all settings
+            const settings = {
+                riskThreshold: document.getElementById('riskThreshold').value,
+                modelSensitivity: document.getElementById('modelSensitivity').value,
+                predictionHorizon: document.getElementById('predictionHorizon').value,
+                dataRefresh: document.getElementById('dataRefresh').value,
+                primaryEmail: document.getElementById('primaryEmail').value,
+                emailFrequency: document.getElementById('emailFrequency').value,
+                additionalEmails: document.getElementById('additionalEmails').value,
+                highRiskAlerts: document.getElementById('highRiskAlerts').classList.contains('bg-fintech-600'),
+                weeklyReports: document.getElementById('weeklyReports').classList.contains('bg-fintech-600'),
+                actionReminders: document.getElementById('actionReminders').classList.contains('bg-fintech-600'),
+                modelAlerts: document.getElementById('modelAlerts').classList.contains('bg-fintech-600')
+            };
+
+            // In a real app, this would send to the backend
+            console.log('Saving settings:', settings);
+            alert('Settings saved successfully!');
+        }
+    </script>
+</body>
+</html>
