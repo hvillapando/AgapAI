@@ -24,7 +24,7 @@ This document provides instructions on how to set up, configure, and run the Aga
     The `requirements.txt` file contains:
     ```
     Flask==3.1.2
-    numpy==1.26.0
+    numpy==2.3.2
     pandas==2.3.2
     joblib==1.5.1
     ```
