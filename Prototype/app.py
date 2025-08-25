@@ -14,9 +14,9 @@ app = Flask(__name__)
 # For this example, we'll use placeholder data and a mock prediction function.
 
 mock_employees = [
-    {"id": "001", "name": "Employee #001", "title": "Software Engineer", "department": "IT", "risk": "high", "score": 85, "tenure": 3.5, "factors": ["High workload", "Limited growth opportunities"], "actions": ["Schedule 1:1", "Mentorship program"]},
+    {"id": "001", "name": "Employee #001", "title": "Software Developer", "department": "IT", "risk": "high", "score": 85, "tenure": 3.5, "factors": ["High workload", "Limited growth opportunities"], "actions": ["Schedule 1:1", "Mentorship program"]},
     {"id": "002", "name": "Employee #002", "title": "Branch Manager", "department": "Retail Banking", "risk": "medium", "score": 60, "tenure": 5.1, "factors": ["Recent team restructuring"], "actions": ["Compensation review"]},
-    {"id": "003", "name": "Employee #003", "title": "UX Designer", "department": "Operations", "risk": "medium", "score": 55, "tenure": 1.2, "factors": ["New to company", "Limited project exposure"], "actions": ["Onboarding check-in", "Assign mentor"]}
+    {"id": "003", "name": "Employee #003", "title": "Customer Service Representative", "department": "Operations", "risk": "medium", "score": 55, "tenure": 1.2, "factors": ["New to company", "Limited project exposure"], "actions": ["Onboarding check-in", "Assign mentor"]}
 ]
 
 def load_model():
