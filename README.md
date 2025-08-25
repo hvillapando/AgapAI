@@ -1,7 +1,6 @@
 # AgapAI: An Attrition Detection Machine Learning Model
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **AgapAI** is an AI-powered dashboard designed to proactively predict employee well-being and attrition risk, serving as an ethical and insightful *kaagapay* (companion) for HR professionals. The name is a portmanteau of "Agap," from the Filipino word *maagap* (meaning proactive or early), and "AI."
 
