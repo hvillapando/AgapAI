@@ -7,10 +7,10 @@
 This project is an entry for the **BPI DATA Wave 2025**, specifically on **Workplace productivity & Future of Work** track, addressing the challenge of predicting employee well-being and retention ethically in modern work environments.
 
 ## Created by:
-* **Harold Kim Villapando**
-* **Elric Kyle Montero**
-* **Vince Paolo Ramilo**
-* **Gabriel Luigi Virtucio**
+* **Harold Kim Villapando** | [LinkedIn](https://www.linkedin.com/in/harold-villapando)
+* **Elric Kyle Montero** | [LinkedIn](https://www.linkedin.com/in/elric-montero-4a1464309/)
+* **Vince Paolo Ramilo** | [LinkedIn](https://www.linkedin.com/in/vince-ramilo-802682380)
+* **Gabriel Luigi Virtucio** | [LinkedIn](https://www.linkedin.com/in/gab-virtucio-017138348)
 
 ## Table of Contents
 1.  [Project Overview](#project-overview)
